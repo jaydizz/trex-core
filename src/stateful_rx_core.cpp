@@ -97,7 +97,7 @@ void PerPacketLatency::reset() {
 void PerPacketLatency::write() {
     if ( latency_file.is_open() ) {
         for( int i = 0; i < latency_index; i++)
-        latency_file << ppl_buffer[i];
+        latency_file << ppl_buffer[i] << endl;
     }
 }
 
@@ -335,6 +335,7 @@ bool CCPortLatency::Create(uint8_t id,
 
 void CCPortLatency::Delete(){
     m_hist.Delete();
+    m_pp_latency.Delete();
 }
 
 void CCPortLatency::update_packet(rte_mbuf_t * m, int port_id){
