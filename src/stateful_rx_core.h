@@ -129,6 +129,23 @@ struct  latency_header {
 
 class CLatencyManager ;
 class CRxAstfCore;
+class PerPacketLatency {
+public:
+    /**
+    * adds a latency entry
+    * writes to dump if buffer is full
+    **/
+    void Add(dsec_t);
+    void Create();
+private:
+    char filename[120];
+    std::ofstream latency_file;
+    dsec_t ppl_buffer[PPL_BUFFER_MAX_SIZE];
+    int latency_index;
+    void write();
+    void reset();
+
+};
 // per port
 class CCPortLatency {
 public:
@@ -292,23 +309,6 @@ public:
      PerPacketLatency m_pp_latency;
 };
 
-class PerPacketLatency {
-public:
-    /**
-    * adds a latency entry
-    * writes to dump if buffer is full
-    **/
-    void Add(dsec_t);
-    void Create();
-private:
-    char filename[120];
-    std::ofstream latency_file;
-    dsec_t ppl_buffer[PPL_BUFFER_MAX_SIZE];
-    int latency_index;
-    void write();
-    void reset();
-
-};
 class CPortLatencyHWBase {
 public:
     
