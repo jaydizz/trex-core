@@ -97,7 +97,7 @@ void PerPacketLatency::reset() {
 void PerPacketLatency::write() {
     if ( latency_file.is_open() ) {
         for( int i = 0; i < PPL_BUFFER_MAX_SIZE - 1; i++)
-        latency_file << ppl_buffer[i];
+        latency_file << ppl_buffer[i] << endl;
     }
 }
 
