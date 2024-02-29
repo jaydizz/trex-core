@@ -76,6 +76,29 @@ const uint8_t icmp_pkt[]={
 
 };
 
+PerPacketLatency::PerPacketLatency() {
+    this->latency_file.open("/tmp/lol", std::ios::out);
+
+};
+
+void PerPacketLatency::Add(dsec_t latency) {
+    if( this->latency_index > PPL_BUFFER_MAX_SIZE - 1) {
+        this->write();
+        this->reset();
+    }
+    this->ppl_buffer[this->latency_index] = latency;
+};
+
+void PerPacketLatency::reset() {
+    this->latency_index = 0;
+}
+
+void PerPacketLatency::write() {
+    if ( this->latency_file.is_open() ) {
+        for( int i = 0; i < PPL_BUFFER_MAX_SIZE - 1; i++)
+        this->latency_file << this->ppl_buffer[i];
+    }
+}
 
 void CLatencyPktInfo::Create(class CLatencyPktMode *m_l_pkt_info){
     uint8_t pkt_size = m_l_pkt_info->getPacketLen();
@@ -296,10 +319,11 @@ bool CCPortLatency::Create(uint8_t id,
         set_dummy_port_in_pair();
         rx_port->set_dummy_port_in_pair();
     }
-
+    //TODO: CREATE PPL 
     m_hist.Create();
     reset();
     m_tunnel_ctx = nullptr;
+    m_pp_latency.Create();
     return (true);
 }
 
@@ -621,6 +645,7 @@ bool CCPortLatency::check_packet(rte_mbuf_t * m,CRx_check_header * & rx_p) {
     dsec_t ctime=ptime_convert_hr_dsec(d);
     m_hist.Add(ctime);
     m_jitter.calc(ctime);
+    m_pp_latency.Add(ctime);
     return (true);
 }
 

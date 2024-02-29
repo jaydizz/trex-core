@@ -24,10 +24,13 @@ limitations under the License.
 
 #include "bp_sim.h"
 #include "utl_ip.h"
+#include <iostream>
+#include <fstream>
 
 #define L_PKT_SUBMODE_NO_REPLY 1
 #define L_PKT_SUBMODE_REPLY 2
 #define L_PKT_SUBMODE_0_SEQ 3
+#define PPL_BUFFER_MAX_SIZE 64
 
 class TrexWatchDog;
 
@@ -286,9 +289,26 @@ public:
      CRXCoreIgnoreStat m_ign_stats_prev;
      CJitter         m_jitter;
 	 CTimeHistogram  m_hist; /* all window */
+     PerPacketLatency m_pp_latency;
 };
 
+class PerPacketLatency {
+public:
+    /**
+    * adds a latency entry
+    * writes to dump if buffer is full
+    **/
+    void Add(dsec_t);
+    void Create();
+private:
+    char filename[120];
+    std::ofstream latency_file;
+    dsec_t ppl_buffer[PPL_BUFFER_MAX_SIZE];
+    int latency_index;
+    void write();
+    void reset();
 
+};
 class CPortLatencyHWBase {
 public:
     
