@@ -160,7 +160,7 @@ void CTimeHistogram::update() {
     rte_mb();
     m_period = new_period;
     rte_mb();
-
+    
     m_max_ar[m_win_cnt] = period_elem.get_max();
     m_win_cnt++;
     if (!m_hot_max_done) {

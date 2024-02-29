@@ -137,6 +137,7 @@ public:
     **/
     void Add(dsec_t);
     void Create();
+    void Delete();
 private:
     char filename[120];
     std::ofstream latency_file;

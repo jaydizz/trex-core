@@ -82,7 +82,7 @@ void PerPacketLatency::Create() {
 };
 
 void PerPacketLatency::Add(dsec_t latency) {
-    if( latency_index > PPL_BUFFER_MAX_SIZE - 1) {
+    if( latency_index == PPL_BUFFER_MAX_SIZE - 1) {
         write();
         reset();
     }
@@ -96,9 +96,14 @@ void PerPacketLatency::reset() {
 
 void PerPacketLatency::write() {
     if ( latency_file.is_open() ) {
-        for( int i = 0; i < PPL_BUFFER_MAX_SIZE - 1; i++)
-        latency_file << ppl_buffer[i] << endl;
+        for( int i = 0; i < latency_index; i++)
+        latency_file << ppl_buffer[i];
     }
+}
+
+void PerPacketLatency::Delete() {
+    write();
+    latency_file.close();
 }
 
 void CLatencyPktInfo::Create(class CLatencyPktMode *m_l_pkt_info){
