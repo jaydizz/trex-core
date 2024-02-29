@@ -76,7 +76,7 @@ const uint8_t icmp_pkt[]={
 
 };
 
-PerPacketLatency::PerPacketLatency() {
+void PerPacketLatency::Create() {
     latency_file.open("/tmp/lol", std::ios::out);
 
 };
