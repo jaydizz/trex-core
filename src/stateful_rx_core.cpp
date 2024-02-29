@@ -87,6 +87,7 @@ void PerPacketLatency::Add(dsec_t latency) {
         reset();
     }
     ppl_buffer[latency_index] = latency;
+    latency_index++;
 };
 
 void PerPacketLatency::reset() {
