@@ -77,26 +77,26 @@ const uint8_t icmp_pkt[]={
 };
 
 PerPacketLatency::PerPacketLatency() {
-    this->latency_file.open("/tmp/lol", std::ios::out);
+    latency_file.open("/tmp/lol", std::ios::out);
 
 };
 
 void PerPacketLatency::Add(dsec_t latency) {
-    if( this->latency_index > PPL_BUFFER_MAX_SIZE - 1) {
-        this->write();
-        this->reset();
+    if( latency_index > PPL_BUFFER_MAX_SIZE - 1) {
+        write();
+        reset();
     }
-    this->ppl_buffer[this->latency_index] = latency;
+    ppl_buffer[latency_index] = latency;
 };
 
 void PerPacketLatency::reset() {
-    this->latency_index = 0;
+    latency_index = 0;
 }
 
 void PerPacketLatency::write() {
-    if ( this->latency_file.is_open() ) {
+    if ( latency_file.is_open() ) {
         for( int i = 0; i < PPL_BUFFER_MAX_SIZE - 1; i++)
-        this->latency_file << this->ppl_buffer[i];
+        latency_file << ppl_buffer[i];
     }
 }
 
